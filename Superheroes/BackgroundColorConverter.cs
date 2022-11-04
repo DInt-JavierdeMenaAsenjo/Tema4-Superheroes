@@ -10,7 +10,7 @@ namespace Superheroes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((bool)value) return Brushes.PaleGreen;
-            else return Brushes.Red;
+            else return Brushes.IndianRed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
