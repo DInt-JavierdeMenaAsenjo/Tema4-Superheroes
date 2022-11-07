@@ -7,23 +7,96 @@
         mc:Ignorable="d"
         Title="Superhéroes" Height="500" Width="700"  MinHeight="500" MinWidth="700">
     <Window.Resources>
-        <Style TargetType="Image" x:Key="superheroType">
+        <Style TargetType="Image" x:Key="logoImage">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Width" Value="40"/>
+        </Style>
+        <Style TargetType="Image" x:Key="imagenHeroe">
+            <Setter Property="Opacity" Value="0.5"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Border" x:Key="imagenBorde">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DockPanel" x:Key="colorFondo">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=HeroeActual.Heroe}" Value="True">
+                    <Setter Property="Background" Value="PaleGreen"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=HeroeActual.Heroe}" Value="False">
+                    <Setter Property="Background" Value="IndianRed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Image" x:Key="vengadorVisible"  BasedOn="{StaticResource logoImage}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=HeroeActual.Vengador}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=HeroeActual.Vengador}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Image" x:Key="xmenVisible" BasedOn="{StaticResource logoImage}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="40"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=HeroeActual.Xmen}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=HeroeActual.Xmen}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="nombreHeroe">
+            <Setter Property="FontSize" Value="40"></Setter>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="FontSize" To="50" Duration="0:0:1"></DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="FontSize" To="40" Duration="0:0:1"></DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
         </Style>
         <local:BackgroundColorConverter x:Key="conversorFondo"/>
         <local:HeroGroupConverter x:Key="heroGroupConversor"/>
 
     </Window.Resources>
-    <DockPanel x:Name="superheroeGrid" Background="{Binding Path=HeroeActual.Heroe, Converter={StaticResource conversorFondo}}">
+    <DockPanel x:Name="superheroeGrid" Style="{StaticResource colorFondo}">
         <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="10,5,10,0">
-            <TextBlock DockPanel.Dock="Left" Text="{Binding Path=HeroeActual.Nombre}" Foreground="White" FontWeight="Bold" FontSize="40"  >
+            <TextBlock DockPanel.Dock="Left" Text="{Binding Path=HeroeActual.Nombre}" Style="{StaticResource nombreHeroe}"  Foreground="White" FontWeight="Bold">
                 <TextBlock.Effect>
                     <DropShadowEffect/>
                 </TextBlock.Effect>
             </TextBlock>
-            <Image DockPanel.Dock="Right" Source="assets/xmen.png" Visibility="{Binding Path=HeroeActual.Xmen, Converter={StaticResource heroGroupConversor}}" Style="{StaticResource superheroType}"></Image>
-            <Image DockPanel.Dock="Right" Source="assets/avengers.png" Visibility="{Binding Path=HeroeActual.Vengador, Converter={StaticResource heroGroupConversor}}" Style="{StaticResource superheroType}"></Image>
+            <Image DockPanel.Dock="Right" Source="assets/xmen.png"  Style="{StaticResource xmenVisible}"></Image>
+            <Image DockPanel.Dock="Right" Source="assets/avengers.png" Style="{StaticResource vengadorVisible}"></Image>
             
         </DockPanel>
 
@@ -43,6 +116,8 @@
                 </Image.RenderTransform>
             </Image>
         </StackPanel>
-        <Image  Source="{Binding Path=HeroeActual.Imagen}" Stretch="UniformToFill" Margin="10"/>
-    </DockPanel>
+        <Border Margin="10" Style="{StaticResource imagenBorde}">
+            <Image Source="{Binding Path=HeroeActual.Imagen}" Style="{StaticResource imagenHeroe}" Stretch="UniformToFill"/>
+        </Border>
+        </DockPanel>
 </Window>
